@@ -1,0 +1,23 @@
+<ion-view view-title="新闻">
+    <ion-content class="padding">
+            <ion-list ng-controller="ResultCtrl" class="list list-inset" show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
+                <ion-item ng-repeat="item in matches" class="item-thumbnail-left item-thumbnail-right">
+                    <h2>{{item.id}}</h2>
+                    <img ng-src="{{item.face}}" style="width: 64px; height: 64px">
+                    <p>{{item.court}}</p>
+                    <p>{{item.record}}</p>
+                    <img ng-src="{{item.face}}" style="width: 64px; height: 64px">
+                    <ion-option-button class="button-positive" ng-click="share(item)">
+                        Share
+                    </ion-option-button>
+                    <ion-option-button class="button-info" ng-click="edit(item)">
+                        Edit
+                    </ion-option-button>
+                    <ion-delete-button class="ion-minus-circled" ng-click="items.splice($index, 1)">
+                    </ion-delete-button>
+                    <ion-reorder-button class="ion-navicon" on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+                    </ion-reorder-button>
+                </ion-item>
+            </ion-list>
+    </ion-content>
+</ion-view>
