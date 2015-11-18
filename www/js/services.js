@@ -52,43 +52,35 @@ angular.module('starter.services', [])
   var matches = [{
     id: 0,
     court: '甘井子区政府',
-    record: '1:0',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'red' },{id:1,score:1,face:'img/adam.jpg',theme:'purple'}],
   },{
     id: 1,
     court: '沙河口区政府',
-    record: '1:1',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'black'},{id:1,score:1,face:'img/adam.jpg',theme:'blue'}]
   },{
     id: 2,
     court: '高新园区政府',
-    record: '3:0',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'green'},{id:1,score:1,face:'img/adam.jpg',theme:'#6B46E5'}]
   },{
     id: 3,
     court: '软件园',
-    record: '1:2',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'#FFC900'},{id:1,score:1,face:'img/adam.jpg',theme:'#0A9DC7'}]
   },{
     id: 4,
     court: '腾飞',
-    record: '1:0',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'#16C70A'},{id:1,score:1,face:'img/adam.jpg',theme:'#0C60EE'}]
   },{
     id: 5,
     court: '蓝宝',
-    record: '1:4',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'#EF473A'},{id:1,score:1,face:'img/adam.jpg',theme:'orange'}]
   },{
     id: 6,
     court: '11中学',
-    record: '1:3',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'red'},{id:1,score:1,face:'img/adam.jpg',theme:'red'}]
   },{
     id: 7,
     court: '甘井子区政府',
-    record: '1:5',
-    face: 'img/ben.png'
+    record: [{id:0,score:1,face:'img/ben.png',theme:'green'},{id:1,score:1,face:'img/adam.jpg',theme:'green'}]
   }];
   return {
     all: function() {
