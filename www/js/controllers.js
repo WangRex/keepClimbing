@@ -33,6 +33,6 @@ angular.module('starter.controllers', [])
     $scope.shouldShowDelete = false;
     $scope.shouldShowReorder = false;
     $scope.listCanSwipe = true;
-    debugger;
+    // debugger;
     $scope.matches = Results.all();
 });

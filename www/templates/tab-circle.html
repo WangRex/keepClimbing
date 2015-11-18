@@ -1,18 +1,18 @@
 <ion-view view-title="战队丰碑">
-    <ion-content class="padding darkGreenBg" >
+    <ion-content class="padding darkGreenBg">
         <ion-list ng-controller="ResultCtrl" class="list list-inset" show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="listCanSwipe">
             <ion-item ng-repeat="item in matches" class="item-thumbnail-left item-thumbnail-right darkGreenBg boderNone">
                 <a class="item item-icon-left item-icon-right secondDarkGreenBg boderNone" href="#">
                     <div class="row">
                         <div class="col"><img ng-src="{{item.record[0].face}}" style="width: 64px; height: 64px"></div>
                         <div class="col col-center">
-                                <div class="row row-center">
-                                    <div class="col" style="background:{{item.record[0].theme}};">{{item.record[0].score}}</div>
-                                    <div class="col" style="background:{{item.record[1].theme}}">{{item.record[1].score}}</div>
-                                </div>
-                                <div class="row row-center">
-                                    <div class="col" style="margin-top: 5px;font-family: 'Noto Sans','Noto Sans SC', sans-serif;font-size: 10px;text-shadow: none;">{{item.court}}</div>
-                                </div>
+                            <div class="row row-center">
+                                <div class="col" style="background:{{item.record[0].theme}};">{{item.record[0].score}}</div>
+                                <div class="col" style="background:{{item.record[1].theme}}">{{item.record[1].score}}</div>
+                            </div>
+                            <div class="row row-center">
+                                <div class="col" style="margin-top: 5px;font-family: 'Noto Sans','Noto Sans SC', sans-serif;font-size: 10px;text-shadow: none;">{{item.court}}</div>
+                            </div>
                         </div>
                         <div class="col"><img ng-src="{{item.record[1].face}}" style="width: 64px; height: 64px"></div>
                     </div>
