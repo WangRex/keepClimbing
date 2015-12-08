@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope, $ionicActionSheet) {
     // 点击按钮触发，或一些其他的触发条件
     $scope.show = function() {
-        console.log(123123123);
+        console.log("test");
 
         // 显示操作表
         $ionicActionSheet.show({
@@ -47,54 +47,46 @@ angular.module('starter.controllers', [])
 .controller('CircleCtrl', function($scope) {})
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-        $scope.chat = Chats.get($stateParams.chatId);
-    })
-    .controller('NewsCtrl', function($scope, $ionicLoading) {
+    $scope.chat = Chats.get($stateParams.chatId);
+})
 
-        $scope.data = {
-            showDelete: false
-        };
+.controller('NewsCtrl', function($scope, News) {
 
-        $scope.edit = function(item) {
-            alert('Edit Item: ' + item.id);
-        };
-        $scope.share = function(item) {
-            alert('Share Item: ' + item.id);
-        };
+    $(".has-header").css('top', '90px');
+    $scope.items = News.all();
 
-        $scope.moveItem = function(item, fromIndex, toIndex) {
-            $scope.items.splice(fromIndex, 1);
-            $scope.items.splice(toIndex, 0, item);
-        };
+    console.log("NewsCtrl");
+    console.log($scope.items);
 
-        $scope.onItemDelete = function(item) {
-            $scope.items.splice($scope.items.indexOf(item), 1);
-        };
+    $scope.data = {
+        showDelete: false
+    };
 
-        $.ajax({
-                url: 'http://localhost:8070/news/getNewsCollection',
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                dataType: "jsonp",
-                data: {},
-            })
-            .done(function(response) {
-                console.log("success");
-                $(".has-header").css('top', '90px');
-                $scope.items = response;
-                console.log(JSON.stringify(response));
-            })
-            .fail(function() {
-                console.log("error");
-            })
-            .always(function() {
-                console.log("complete");
-            });
-    })
+    $scope.edit = function(item) {
+        alert('Edit Item: ' + item.id);
+    };
+    $scope.share = function(item) {
+        alert('Share Item: ' + item.id);
+    };
+
+    $scope.moveItem = function(item, fromIndex, toIndex) {
+        $scope.items.splice(fromIndex, 1);
+        $scope.items.splice(toIndex, 0, item);
+    };
+
+    $scope.onItemDelete = function(item) {
+        $scope.items.splice($scope.items.indexOf(item), 1);
+    };
+})
+
+.controller('NewsDetailCtrl', function($scope, $stateParams, News) {
+    $scope.news = News.get($stateParams.newsId);
+})
 
 .controller('AccountCtrl', function($scope) {
     $scope.settings = {
-        enableFriends: true
+        enableFriends: true,
+        enableGirlFriends: true
     };
 })
 
