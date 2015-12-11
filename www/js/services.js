@@ -49,29 +49,62 @@ angular.module('starter.services', [])
     };
 })
 
-.factory('News', function($http) {
+.factory('News', function($http, $q) {
     // Might use a resource here that returns a JSON array
+
+    var News;
 
     return {
         all: function(message) {
+            var url = 'http://localhost:8070/news/getNewsCollection';
 
-            $http.get('http://localhost:8070/news/getNewsCollection', message, {}).success(function(response) {
-                var news = response;
-                console.log(news);
-                return news;
-            }).error(function() {});
+            var deferred = $q.defer(); // 声明延后执行，表示要去监控后面的执行  
+            $http({
+                method: 'GET',
+                url: url
+            }).
+            success(function(data, status, headers, config) {
+                deferred.resolve(data); // 声明执行成功，即http请求数据成功，可以返回数据了  
+                News = data;
+            }).
+            error(function(data, status, headers, config) {
+                deferred.reject(data); // 声明执行失败，即服务器返回错误  
+            });
+            return deferred.promise; // 返回承诺，这里并不是最终数据，而是访问最终数据的API  
+            // end query
 
         },
+
         remove: function(news) {
             news.splice(news.indexOf(news), 1);
         },
+
         get: function(newsId) {
-            for (var i = 0; i < news.length; i++) {
-                if (news[i].id === parseInt(newsId)) {
-                    return news[i];
+
+            var url = 'http://localhost:8070/news/getNewsDetail?newsId=' + newsId;
+
+            var deferred = $q.defer(); // 声明延后执行，表示要去监控后面的执行  
+            $http({
+                method: 'GET',
+                url: url
+            }).
+            success(function(data, status, headers, config) {
+                deferred.resolve(data); // 声明执行成功，即http请求数据成功，可以返回数据了  
+            }).
+            error(function(data, status, headers, config) {
+                deferred.reject(data); // 声明执行失败，即服务器返回错误  
+            });
+            return deferred.promise; // 返回承诺，这里并不是最终数据，而是访问最终数据的API  
+            // end query
+
+
+            /*console.log(News);
+            for (var i = 0; i < News.length; i++) {
+                if (News[i].newsId === newsId) {
+                    return News[i];
                 }
             }
-            return null;
+            return null;*/
         }
     };
 })

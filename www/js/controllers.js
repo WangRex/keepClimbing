@@ -52,11 +52,17 @@ angular.module('starter.controllers', [])
 
 .controller('NewsCtrl', function($scope, News) {
 
-    $(".has-header").css('top', '90px');
-    $scope.items = News.all();
+    // $scope.items = News.all();
 
-    console.log("NewsCtrl");
-    console.log($scope.items);
+    var promise = News.all(); // 同步调用，获得承诺接口  
+    promise.then(function(data) { // 调用承诺API获取数据 .resolve  
+        $(".has-header").css('top', '90px');
+        $scope.items = data;
+    }, function(data) { // 处理错误 .reject  
+        $scope.items = {
+            error: '没有新闻！'
+        };
+    });
 
     $scope.data = {
         showDelete: false
@@ -79,8 +85,18 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('NewsDetailCtrl', function($scope, $stateParams, News) {
-    $scope.news = News.get($stateParams.newsId);
+.controller('NewsDetailCtrl', function($scope, $stateParams, News, $ionicNavBarDelegate) {
+    var promise = News.get($stateParams.newsId); // 同步调用，获得承诺接口  
+    promise.then(function(data) { // 调用承诺API获取数据 .resolve  
+        $ionicNavBarDelegate.title("asdfasdfasdfasdfsadf");
+        $scope.news = data[0];
+    }, function(data) { // 处理错误 .reject  
+        $scope.news = {
+            error: '没有新闻！'
+        };
+    });
+    // $scope.news = News.get($stateParams.newsId);
+
 })
 
 .controller('AccountCtrl', function($scope) {
