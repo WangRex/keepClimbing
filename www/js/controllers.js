@@ -88,7 +88,7 @@ angular.module('starter.controllers', [])
 .controller('NewsDetailCtrl', function($scope, $stateParams, News, $ionicNavBarDelegate) {
     var promise = News.get($stateParams.newsId); // 同步调用，获得承诺接口  
     promise.then(function(data) { // 调用承诺API获取数据 .resolve  
-        $ionicNavBarDelegate.title("asdfasdfasdfasdfsadf");
+        //这里有个问题，就是title不能通过这个动态来获取。
         $scope.news = data[0];
     }, function(data) { // 处理错误 .reject  
         $scope.news = {
