@@ -1,26 +1,17 @@
 <ion-view view-title="新闻" cache-view="false">
-    <div class="bar bar-subheader">
-        <ion-header-bar class="bar-positive">
-            <div class="buttons">
-                <button class="button button-icon icon ion-ios-minus-outline" ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
-            </div>
-            <h1 class="title"></h1>
-            <div class="buttons">
-                <button class="button" ng-click="data.showDelete = false; data.showReorder = !data.showReorder">
-                    Reorder
-                </button>
-            </div>
-        </ion-header-bar>
-    </div>
+    <ion-nav-buttons side="right">
+        <button class="button" ng-click="scrollToTop()" >回到顶部</button>
+    </ion-nav-buttons>
     <ion-content class="padding">
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh()">
+        </ion-refresher>
         <!-- The list directive is great, but be sure to also checkout the collection repeat directive when scrolling through large lists -->
         <ion-list show-delete="data.showDelete" show-reorder="data.showReorder">
-            <ion-item ng-repeat="item in items" item="item" href="#/tab/news/{{item.newsId}}" class="item-remove-animate">
+            <ion-item ng-repeat="item in items" item="item" href="javascript:void(0);" class="item-remove-animate" ng-click="view(item)" >
                 <div>news title: {{ item.newsTitle }}</div>
-                <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
-                </ion-delete-button>
-                <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
             </ion-item>
         </ion-list>
+        <ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%">
+        </ion-infinite-scroll>
     </ion-content>
 </ion-view>

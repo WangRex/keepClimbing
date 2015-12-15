@@ -55,8 +55,8 @@ angular.module('starter.services', [])
     var News;
 
     return {
-        all: function(message) {
-            var url = 'http://localhost:8070/news/getNewsCollection';
+        all: function(skip, limit) {
+            var url = 'http://localhost:8070/news/getNewsCollectionRefresh?skip=' + skip + '&limit=' + limit;
 
             var deferred = $q.defer(); // 声明延后执行，表示要去监控后面的执行  
             $http({

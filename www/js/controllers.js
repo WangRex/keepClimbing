@@ -50,13 +50,86 @@ angular.module('starter.controllers', [])
     $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('NewsCtrl', function($scope, News) {
+.controller('NewsCtrl', function($scope, News, $state, $ionicScrollDelegate) {
+
+    $scope.moreDataCanBeLoaded = true;
+
+    $scope.jumpTo = function(urlController, params) {
+        $state.go(urlController, params, {
+            reload: true
+        });
+    }
+
+    $scope.items = [];
+
+    var skip;
+
+    $scope.data = {
+        showDelete: false
+    };
+
+    $scope.view = function(item) {
+        $scope.jumpTo("tab.news-detail", {
+            newsId: item.newsId
+        });
+    };
+
+    $scope.doRefresh = function() {
+        News.all(0, 10).then(function(data) {
+            // extend the $scope.items array with the response
+            // array from getData();
+            // http://stackoverflow.com/a/1374131/1015046
+            // 这是尾部叠加数据，不合适
+            //Array.prototype.push.apply($scope.items, data);
+            //http://stackoverflow.com/questions/7032550/javascript-insert-an-array-inside-another-array
+            // 数组插入数组最优做法
+            $scope.items = data;
+            console.log("refresh", $scope.items.length);
+        }).finally(function() {
+            // Stop the ion-refresher from spinning
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+    };
+
+    $scope.loadMore = function() {
+        News.all(skip,3).then(function(data) {
+
+            if (data.length == 0) {
+                $scope.moreDataCanBeLoaded = false;
+            }
+            // extend the $scope.items array with the respo
+            Array.prototype.push.apply($scope.items, data);
+            skip = $scope.items.length;
+        }).finally(function() {
+            // Stop the ion-refresher from spinning
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+    };
+
+    $scope.scrollToTop = function() {
+        $ionicScrollDelegate.scrollTop();
+    };
+
+    // get data on page load
+    News.all(0,3).then(function(data) {
+        $scope.items = data;
+        skip = $scope.items.length;
+    }, function(data) { // 处理错误 .reject  
+        $scope.items = {
+            error: '没有新闻！'
+        };
+    });
+
+})
+
+/*.controller('NewsCtrl', function($scope, News) {
 
     // $scope.items = News.all();
 
+    $scope.items = [];
+
     var promise = News.all(); // 同步调用，获得承诺接口  
     promise.then(function(data) { // 调用承诺API获取数据 .resolve  
-        $(".has-header").css('top', '90px');
         $scope.items = data;
     }, function(data) { // 处理错误 .reject  
         $scope.items = {
@@ -68,24 +141,13 @@ angular.module('starter.controllers', [])
         showDelete: false
     };
 
-    $scope.edit = function(item) {
-        alert('Edit Item: ' + item.id);
-    };
-    $scope.share = function(item) {
-        alert('Share Item: ' + item.id);
-    };
-
-    $scope.moveItem = function(item, fromIndex, toIndex) {
-        $scope.items.splice(fromIndex, 1);
-        $scope.items.splice(toIndex, 0, item);
-    };
-
-    $scope.onItemDelete = function(item) {
-        $scope.items.splice($scope.items.indexOf(item), 1);
-    };
 })
+*/
 
 .controller('NewsDetailCtrl', function($scope, $stateParams, News, $ionicNavBarDelegate) {
+
+    console.log($stateParams.newsId);
+
     var promise = News.get($stateParams.newsId); // 同步调用，获得承诺接口  
     promise.then(function(data) { // 调用承诺API获取数据 .resolve  
         //这里有个问题，就是title不能通过这个动态来获取。
