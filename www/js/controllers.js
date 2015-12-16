@@ -62,7 +62,7 @@ angular.module('starter.controllers', [])
 
     $scope.items = [];
 
-    var skip;
+    var skip, latest;
 
     $scope.data = {
         showDelete: false
@@ -75,7 +75,7 @@ angular.module('starter.controllers', [])
     };
 
     $scope.doRefresh = function() {
-        News.all(0, 10).then(function(data) {
+        News.refresh(latest).then(function(data) {
             // extend the $scope.items array with the response
             // array from getData();
             // http://stackoverflow.com/a/1374131/1015046
@@ -83,7 +83,10 @@ angular.module('starter.controllers', [])
             //Array.prototype.push.apply($scope.items, data);
             //http://stackoverflow.com/questions/7032550/javascript-insert-an-array-inside-another-array
             // 数组插入数组最优做法
-            $scope.items = data;
+            if (data.length == 0) {
+                $scope.items.splice.apply($scope.items, [0, 0].concat(data));
+            }
+            // $scope.items = data;
             console.log("refresh", $scope.items.length);
         }).finally(function() {
             // Stop the ion-refresher from spinning
@@ -92,14 +95,16 @@ angular.module('starter.controllers', [])
     };
 
     $scope.loadMore = function() {
-        News.all(skip,3).then(function(data) {
+        News.all(skip, 3).then(function(data) {
 
             if (data.length == 0) {
                 $scope.moreDataCanBeLoaded = false;
+            } else {
+                // extend the $scope.items array with the respo
+                Array.prototype.push.apply($scope.items, data);
+                // $scope.items.splice.apply($scope.items, [0, 0].concat(data));
+                skip = $scope.items.length;
             }
-            // extend the $scope.items array with the respo
-            Array.prototype.push.apply($scope.items, data);
-            skip = $scope.items.length;
         }).finally(function() {
             // Stop the ion-refresher from spinning
             $scope.$broadcast('scroll.infiniteScrollComplete');
@@ -111,9 +116,11 @@ angular.module('starter.controllers', [])
     };
 
     // get data on page load
-    News.all(0,3).then(function(data) {
+    News.all(0, 3).then(function(data) {
         $scope.items = data;
         skip = $scope.items.length;
+        latest = $scope.items[0].createdTime;
+        console.log(latest);
     }, function(data) { // 处理错误 .reject  
         $scope.items = {
             error: '没有新闻！'
