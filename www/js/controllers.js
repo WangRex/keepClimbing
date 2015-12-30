@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic'])
+angular.module('starter.controllers', ['ionic', 'ui.calendar', 'ui.bootstrap'])
 
 .controller('DashCtrl', function($scope, $ionicActionSheet) {
     // 点击按钮触发，或一些其他的触发条件
@@ -168,98 +168,94 @@ angular.module('starter.controllers', ['ionic'])
 
 })
 
-.controller('MatchCtrl', function($scope, $stateParams, Match, $ionicPopup) {
-    $scope.dateModel = new Date("08-14-2015");
-    $scope.datePopup = new Date("08-14-2015");
-    var disabledDates = [
-        new Date(1437719836326),
-        new Date(2015, 7, 10), //months are 0-based, this is August, 10th!
-        new Date('Wednesday, August 12, 2015'), //Works with any valid Date formats like long format
-        new Date("08-14-2015"), //Short format
-        new Date(1439676000000) //UNIX format
-    ];
-    var monthList = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
-    var weekDaysList = ["日", "一", "二", "三", "四", "五", "六"];
-    $scope.datepickerObject = {};
-    $scope.datepickerObject.inputDate = new Date();
+.controller('MatchCtrl', function($scope, $compile, $timeout, uiCalendarConfig) {
 
-    $scope.datepickerObjectModal = {
-        titleLabel: '选择日期', //Optional
-        todayLabel: '今天', //Optional
-        closeLabel: '关闭', //Optional
-        setLabel: '选择', //Optional
-        errorMsgLabel: '请选择时间.', //Optional
-        setButtonType: 'button-assertive', //Optional
-        modalHeaderColor: 'bar-positive', //Optional
-        modalFooterColor: 'bar-positive', //Optional
-        templateType: 'modal', //Optional
-        inputDate: $scope.datepickerObject.inputDate, //Optional
-        mondayFirst: true, //Optional
-        disabledDates: disabledDates, //Optional
-        monthList: monthList, //Optional
-        weekDaysList: weekDaysList,
-        from: new Date(2012, 5, 1), //Optional
-        to: new Date(2016, 7, 1), //Optional
-        callback: function(val) { //Optional
-            datePickerCallbackModal(val);
-        }
-    };
-    $scope.datepickerObjectPopup = {
-        titleLabel: '选择日期', //Optional
-        todayLabel: '今天', //Optional
-        closeLabel: '关闭', //Optional
-        setLabel: '选择', //Optional
-        errorMsgLabel: '请选择时间.', //Optional
-        setButtonType: 'button-assertive', //Optional
-        modalHeaderColor: 'bar-positive', //Optional
-        modalFooterColor: 'bar-positive', //Optional
-        templateType: 'popup', //Optional
-        inputDate: $scope.datepickerObject.inputDate, //Optional
-        //mondayFirst: true, //Optional
-        sundayFirst: true, //Optional
-        disabledDates: disabledDates, //Optional
-        monthList: monthList, //Optional
-        weekDaysList: weekDaysList,
-        from: new Date(2014, 5, 1), //Optional
-        to: new Date(2016, 7, 1), //Optional
-        callback: function(val) { //Optional
-            datePickerCallbackPopup(val);
-        }
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+    $scope.changeTo = 'Hungarian';
+
+    /* event source that pulls from google.com */
+    $scope.eventSource = {
+        url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
+        className: 'gcal-event', // an option!
+        currentTimezone: 'America/Chicago' // an option!
     };
 
-    var datePickerCallbackModal = function(val) {
-        if (typeof(val) === 'undefined') {
-            console.log('未选择日期');
-        } else {
-            $scope.datepickerObjectModal.inputDate = val;
-            $scope.dateModel = val;
-            console.log('选择的日期是 : ', val)
-        }
+    /* event source that contains custom events on the scope */
+    $scope.events = [{
+        title: 'All Day Event',
+        start: new Date(y, m, 1)
+    }, {
+        title: 'Long Event',
+        start: new Date(y, m, d - 5),
+        end: new Date(y, m, d - 2)
+    }, {
+        id: 999,
+        title: 'Repeating Event',
+        start: new Date(y, m, d - 3, 16, 0),
+        allDay: false
+    }, {
+        id: 999,
+        title: 'Repeating Event',
+        start: new Date(y, m, d + 4, 16, 0),
+        allDay: false
+    }, {
+        title: 'Birthday Party',
+        start: new Date(y, m, d + 1, 19, 0),
+        end: new Date(y, m, d + 1, 22, 30),
+        allDay: false
+    }, {
+        title: 'Click for Google',
+        start: new Date(y, m, 28),
+        end: new Date(y, m, 29),
+        url: 'http://google.com/'
+    }];
+
+    /* event source that calls a function on every view switch */
+    $scope.eventsF = function(start, end, timezone, callback) {
+        var s = new Date(start).getTime() / 1000;
+        var e = new Date(end).getTime() / 1000;
+        var m = new Date(start).getMonth();
+        var events = [{
+            title: 'Feed Me ' + m,
+            start: s + (50000),
+            end: s + (100000),
+            allDay: false,
+            className: ['customFeed']
+        }];
+        callback(events);
     };
 
-    var datePickerCallbackPopup = function(val) {
-        if (typeof(val) === 'undefined') {
-            console.log('未选择日期');
-        } else {
-            $scope.datepickerObjectPopup.inputDate = val;
-            $scope.datePopup = val;
-            console.log('选择的日期是 : ', val)
-        }
+    $scope.calEventsExt = {
+        color: '#f00',
+        textColor: 'yellow',
+        events: [{
+            type: 'party',
+            title: 'Lunch',
+            start: new Date(y, m, d, 12, 0),
+            end: new Date(y, m, d, 14, 0),
+            allDay: false
+        }, {
+            type: 'party',
+            title: 'Lunch 2',
+            start: new Date(y, m, d, 12, 0),
+            end: new Date(y, m, d, 14, 0),
+            allDay: false
+        }, {
+            type: 'party',
+            title: 'Click for Google',
+            start: new Date(y, m, 28),
+            end: new Date(y, m, 29),
+            url: 'http://google.com/'
+        }]
     };
 
-    /* console.log($stateParams.matchId);
-
-     var promise = Match.get($stateParams.matchId); // 同步调用，获得承诺接口  
-     promise.then(function(data) { // 调用承诺API获取数据 .resolve  
-         //这里有个问题，就是title不能通过这个动态来获取。
-         $scope.match = data[0];
-     }, function(data) { // 处理错误 .reject  
-         $scope.match = {
-             error: '赛事！'
-         };
-     });*/
-    // $scope.news = Match.get($stateParams.matchId);
-
+    /* event sources array*/
+    $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+    $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
 })
 
 .controller('AccountCtrl', function($scope) {
