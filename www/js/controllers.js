@@ -175,8 +175,6 @@ angular.module('starter.controllers', ['ionic', 'ui.calendar', 'ui.bootstrap'])
     var m = date.getMonth();
     var y = date.getFullYear();
 
-    $scope.changeTo = 'Hungarian';
-
     /* event source that pulls from google.com */
     $scope.eventSource = {
         url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
@@ -255,6 +253,7 @@ angular.module('starter.controllers', ['ionic', 'ui.calendar', 'ui.bootstrap'])
 
     /* alert on eventClick */
     $scope.alertOnEventClick = function(date, jsEvent, view) {
+        console.log("test");
         $scope.alertMessage = (date.title + ' was clicked ');
     };
 
