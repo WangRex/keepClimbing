@@ -253,6 +253,45 @@ angular.module('starter.controllers', ['ionic', 'ui.calendar', 'ui.bootstrap'])
         }]
     };
 
+    /* alert on eventClick */
+    $scope.alertOnEventClick = function( date, jsEvent, view){
+        $scope.alertMessage = (date.title + ' was clicked ');
+    };
+
+    /* alert on Drop */
+     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
+       $scope.alertMessage = ('Event Dropped to make dayDelta ' + delta);
+    };
+
+    /* alert on Resize */
+    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
+       $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
+    };
+    
+     /* Render Tooltip */
+    $scope.eventRender = function( event, element, view ) {
+        element.attr({'tooltip': event.title,
+                      'tooltip-append-to-body': true});
+        $compile(element)($scope);
+    };
+
+    /* config object */
+    $scope.uiConfig = {
+      calendar:{
+        height: 450,
+        editable: true,
+        header:{
+          left: 'title',
+          center: 'center',
+          right: 'today prev,next'
+        },
+        eventClick: $scope.alertOnEventClick,
+        eventDrop: $scope.alertOnDrop,
+        eventResize: $scope.alertOnResize,
+        eventRender: $scope.eventRender
+      }
+    };
+
     /* event sources array*/
     $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
     $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
