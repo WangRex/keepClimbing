@@ -254,42 +254,58 @@ angular.module('starter.controllers', ['ionic', 'ui.calendar', 'ui.bootstrap'])
     };
 
     /* alert on eventClick */
-    $scope.alertOnEventClick = function( date, jsEvent, view){
+    $scope.alertOnEventClick = function(date, jsEvent, view) {
         $scope.alertMessage = (date.title + ' was clicked ');
     };
 
     /* alert on Drop */
-     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-       $scope.alertMessage = ('Event Dropped to make dayDelta ' + delta);
+    $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
+        $scope.alertMessage = ('Event Dropped to make dayDelta ' + delta);
     };
 
     /* alert on Resize */
-    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
+    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view) {
+        $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
     };
-    
-     /* Render Tooltip */
-    $scope.eventRender = function( event, element, view ) {
-        element.attr({'tooltip': event.title,
-                      'tooltip-append-to-body': true});
+
+    /* Render Tooltip */
+    $scope.eventRender = function(event, element, view) {
+        element.attr({
+            'tooltip': event.title,
+            'tooltip-append-to-body': true
+        });
         $compile(element)($scope);
     };
 
     /* config object */
     $scope.uiConfig = {
-      calendar:{
-        height: 450,
-        editable: true,
-        header:{
-          left: 'title',
-          center: 'center',
-          right: 'today prev,next'
-        },
-        eventClick: $scope.alertOnEventClick,
-        eventDrop: $scope.alertOnDrop,
-        eventResize: $scope.alertOnResize,
-        eventRender: $scope.eventRender
-      }
+        calendar: {
+            height: 450,
+            editable: true,
+            header: {
+                left: 'title',
+                center: 'center',
+                right: 'today prev,next'
+            },
+            buttonText: {
+                prev: '上月',
+                next: '下月',
+                prevYear: '去年',
+                nextYear: '明年',
+                today: '今天',
+                month: '月',
+                week: '周',
+                day: '日'
+            },
+            eventClick: $scope.alertOnEventClick,
+            eventDrop: $scope.alertOnDrop,
+            eventResize: $scope.alertOnResize,
+            eventRender: $scope.eventRender,
+            monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+            monthNamesShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"],
+            dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+            dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+        }
     };
 
     /* event sources array*/
