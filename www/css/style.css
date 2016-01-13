@@ -28,3 +28,6 @@
 .col img{
 	border-radius: 50%;
 }
+.container {
+    width: 100%;
+}
